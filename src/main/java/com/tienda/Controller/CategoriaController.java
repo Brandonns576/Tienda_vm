@@ -2,6 +2,7 @@ package com.tienda.Controller;
 
 import com.tienda.domain.Categoria;
 import com.tienda.service.CategoriaService;
+import com.tienda.service.FirebaseStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +23,7 @@ public class CategoriaController {
 
         var lista=categoriaService.getCategorias(false);
         model.addAttribute("categorias",lista);
-        
+        model.addAttribute("totalCategorias",lista.size()); 
         return "/categoria/listado";
     }
     
@@ -32,15 +33,22 @@ public class CategoriaController {
         return "redirect:/categoria/listado";
     }
 
-    @GetMapping("/modificar/{idCategoria}")
+    @GetMapping("/modifica/{idCategoria}")
     public String modificar(Categoria categoria, Model model){
         categoria=categoriaService.getCategoria(categoria);
         model.addAttribute("categoria",categoria);
         return "/categoria/modifica";
     }
 
+    @Autowired
+    private FirebaseStorageService firebaseStorageService; 
     @PostMapping("/guardar")
     public String guardar(Categoria categoria, @RequestParam("imagenFile") MultipartFile imagenFile){
+    if(!imagenFile.isEmpty()){
+        categoriaService.save(categoria);
+        String ruta = firebaseStorageService.cargaImagen(imagenFile,"categoria",categoria.getIdCategoria());
+        categoria.setRutaImage(ruta);
+    }
         categoriaService.save(categoria);
     return "redirect:/categoria/listado";
 }
