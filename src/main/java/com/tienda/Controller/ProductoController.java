@@ -52,12 +52,17 @@ public class ProductoController {
 
     @Autowired
     private FirebaseStorageService firebaseStorageService;
-
+    
     @PostMapping("/guardar")
-    public String guardar(Producto producto, @RequestParam("imagenFile") MultipartFile imagenFile) {
+    public String guardar(Producto producto,
+            @RequestParam("imagenFile") MultipartFile imagenFile) {
         if (!imagenFile.isEmpty()) {
+            //Nos pasaron una imagen
             productoService.save(producto);
-            String ruta = firebaseStorageService.cargaImagen(imagenFile, "producto", producto.getId_Producto());
+            String ruta = firebaseStorageService
+                    .cargaImagen(imagenFile,
+                            "producto", 
+                            producto.getIdProducto());
             producto.setRutaImagen(ruta);
         }
         productoService.save(producto);

@@ -24,12 +24,11 @@ public class ProductoService {
     }
     
     //se escriben los metodos de un CRUD Create Read Update Delete
-    @Transactional(readOnly=true)
-    public Producto getProducto(Producto producto){
-       
-   return productoRepository.findById(producto.getId_Producto()).orElse(null);
+   @Transactional(readOnly=true)
+    public Producto getProducto(Producto producto) {        
+        return productoRepository.findById(producto.getIdProducto()).orElse(null);
     }
-
+    
    @Transactional
     public void delete(Producto producto){
        productoRepository.delete(producto);
