@@ -1,4 +1,4 @@
- package com.tienda.domain;
+package com.tienda.domain;
 
 import jakarta.persistence.*;
 import java.io.Serializable;
@@ -6,23 +6,21 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "producto")
+@Table(name="producto")
 public class Producto implements Serializable {
-
-    private static final long serialVersionUID = 1l;
-
+    private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_producto")
-    private Long id_Producto;
-//    private Long id_Categoria;
+    @Column(name="id_producto")
+    private Long idProducto;
+    //private Long idCategoria;
     private String descripcion;
     private String detalle;
     private double precio;
     private int existencias;
     private String rutaImagen;
     private boolean activo;
-    
     
     @ManyToOne
     @JoinColumn(name="id_categoria")
@@ -36,28 +34,12 @@ public class Producto implements Serializable {
         this.categoria = categoria;
     }
 
-    public Long getId_Producto() {
-        return id_Producto;
+    public Long getIdProducto() {
+        return idProducto;
     }
 
-    public void setId_Producto(Long id_Producto) {
-        this.id_Producto = id_Producto;
-    }
-
-//    public Long getId_Categoria() {
-//        return id_Categoria;
-//    }
-//
-//    public void setId_Categoria(Long id_Categoria) {
-//        this.id_Categoria = id_Categoria;
-//    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setIdProducto(Long idProducto) {
+        this.idProducto = idProducto;
     }
 
     public String getDetalle() {
@@ -84,6 +66,22 @@ public class Producto implements Serializable {
         this.existencias = existencias;
     }
 
+//    public Long getIdCategoria() {
+//        return idCategoria;
+//    }
+//
+//    public void setIdCategoria(Long idCategoria) {
+//        this.idCategoria = idCategoria;
+//    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
     public String getRutaImagen() {
         return rutaImagen;
     }
@@ -99,5 +97,5 @@ public class Producto implements Serializable {
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
-
+    
 }
