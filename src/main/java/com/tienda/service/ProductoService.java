@@ -13,13 +13,16 @@ public class ProductoService {
     
     @Autowired
     private ProductoRepository productoRepository;
-
+    
     @Transactional(readOnly=true)
-    public List<Producto> getProductos(boolean activos){
+    public List<Producto> getProductos(boolean activos) {
         var lista = productoRepository.findAll();
-   return lista;
+        if (activos) {
+            lista.removeIf(e -> !e.isActivo());
+        }
+        return lista;
     }
-
+    
     //se escriben los metodos de un CRUD Create Read Update Delete
     @Transactional(readOnly=true)
     public Producto getProducto(Producto producto){
