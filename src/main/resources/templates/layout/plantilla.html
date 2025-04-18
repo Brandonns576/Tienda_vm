@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html  xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:th="http://www.thymeleaf.org"
-    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
     <head th:fragment="head">
         <title>Techshop</title>
         <meta charset="UTF-8"/>
         <link rel="icon" type="image/png" sizes="16x16" href="/fav/favicon-16x16.png"/>
-        <link rel="icon" type="image/png" sizes="32x32" href="/fav/favicon-32x32.png"/>      
+        <link rel="icon" type="image/png" sizes="32x32" href="/fav/favicon-32x32.png"/>
         <link rel="icon" type="image/png" sizes="96x96" href="/fav/favicon-96x96.png"/>
         <link rel="icon" type="image/png" sizes="256x256" href="/fav/favicon-256x256.png"/>
         <script th:src="@{/js/rutinas.js}"></script>
@@ -15,11 +15,9 @@
         <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
         <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
         <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
- 
     </head>
     <body>
-      
-    <header th:fragment="header" class="header">
+        <header th:fragment="header" class="header">
             <nav class="navbar navbar-expand-sm navbar-dark bg-dark p-0">
                 <div class="container">
                     <a th:href="@{/}" class="navbar-brand">[[#{aplicacion.titulo}]]</a>
@@ -27,7 +25,8 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-                        <ul class="navbar-nav">
+                        <ul sec:authorize="hasRole('ROLE_VENDEDOR')"
+                            class="navbar-nav">
                             <li class="nav-item px-2"><a class="nav-link" th:href="@{/categoria/listado}">[[#{plantilla.categorias}]]</a></li>
                             <li class="nav-item px-2"><a class="nav-link" th:href="@{/producto/listado}">[[#{plantilla.productos}]]</a></li>
                             <li class="nav-item dropdown">
@@ -39,10 +38,18 @@
                                 <ul class="dropdown-menu dropdown-menu-dark">
                                     <li><a class="dropdown-item" th:href="@{/pruebas/listado}">[[#{plantilla.asociaciones}]]</a></li>
                                     <li><a class="dropdown-item" th:href="@{/pruebas/listado2}">[[#{plantilla.consultas}]]</a></li>
-                                    <li><a class="dropdown-item" th:href="@{/reportes/principal}">[[#{plantilla.reportes}]]</a></li>
+                                    <li class="dropdown-submenu">
+                                        <a class="dropdown-item dropdown-toggle" href="#">[[#{plantilla.reportes}]]</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" th:href="@{/reportes/reporte1}">Reporte 1</a></li>
+                                            <li><a class="dropdown-item" th:href="@{/reportes/reporte2}">Reporte 2</a></li>
+                                            <li><a class="dropdown-item" th:href="@{/reportes/reporte3}">Reporte 3</a></li>
+                                        </ul>
+                                    </li>
                                 </ul>
                             </li>
-                            <li class="nav-item dropdown">
+                            <li sec:authorize="hasRole('ROLE_ADMIN')"
+                                class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" 
                                    data-bs-toggle="dropdown" 
                                    href="#" 
@@ -81,8 +88,35 @@
                             </li>
                         </ul>
                         <div id="resultBlock">
-
                         </div>
+                        <ul sec:authorize='!isAuthenticated()'
+                            class='navbar-nav'>
+                            <li class='nav-item px-2'>
+                                <a class='nav-menu-link-nav-link'
+                                   th:href='@{/login}'> 
+                                    <i class='fas-fa-sign-in-alt'></i>
+                                </a>   
+                            </li>                        
+                        </ul>
+                        <ul sec:authorize='!isAuthenticated()'
+                            class='navbar- nav'>
+                            <li class='nav-item px-2 my-auto text-white'>                                
+                                <img src='@{${session.usuarioImagen}}'
+                                     alt='...'
+                                     height="40"
+                                     class='rounded-circle'/>
+                                <span sec:authentication='name'>Doe</span>                                       
+                            </li>  
+                            <li class='nav-item'>
+                                <form method="post"
+                                      th:action='@{/logout}'>
+                                    <button class='btn- btn-dark'>
+                                        <i class='fas-fa-sing-out-alt'> </i>                                        
+                                    </button>
+
+                                </form>
+                            </li> 
+                        </ul>
                     </div>
                 </div>
             </nav>
@@ -95,10 +129,11 @@
                     </div>
                 </div>
             </section>
-           
+
         </header>
+
         <footer th:fragment="footer" class="p-2 mt-5 bg-info text-white">
             <p class="text-center lead">&COPY; [[#{plantilla.derechos}]]</p>
         </footer>
-        </body>
+    </body>
 </html>
